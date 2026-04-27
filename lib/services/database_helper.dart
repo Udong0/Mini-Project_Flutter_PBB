@@ -75,4 +75,15 @@ class DatabaseHelper {
     Database db = await instance.database;
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
+
+  // Updates a row in the database. Returns the number of affected rows.
+  Future<int> update(Glitch glitch) async {
+    Database db = await instance.database;
+    return await db.update(
+      table,
+      glitch.toMap(),
+      where: '$columnId = ?',
+      whereArgs: [glitch.id],
+    );
+  }
 }

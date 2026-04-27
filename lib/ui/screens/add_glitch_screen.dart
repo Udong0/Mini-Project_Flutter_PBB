@@ -11,7 +11,9 @@ import 'package:geocoding/geocoding.dart';
 import 'image_painter_screen.dart';
 
 class AddGlitchScreen extends StatefulWidget {
-  const AddGlitchScreen({Key? key}) : super(key: key);
+  final Glitch? glitch; // Null for Add, non-null for Edit
+
+  const AddGlitchScreen({Key? key, this.glitch}) : super(key: key);
 
   @override
   State<AddGlitchScreen> createState() => _AddGlitchScreenState();
@@ -19,8 +21,8 @@ class AddGlitchScreen extends StatefulWidget {
 
 class _AddGlitchScreenState extends State<AddGlitchScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descController = TextEditingController();
+  late TextEditingController _titleController;
+  late TextEditingController _descController;
   
   String? _imagePath;
   bool _isSaving = false;
@@ -29,7 +31,21 @@ class _AddGlitchScreenState extends State<AddGlitchScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchLocation();
+    _titleController = TextEditingController(text: widget.glitch?.title ?? '');
+    _descController = TextEditingController(text: widget.glitch?.description ?? '');
+    _imagePath = widget.glitch?.imagePath;
+
+    // Only fetch location if it's a new glitch
+    if (widget.glitch == null) {
+      _fetchLocation();
+    }
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descController.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchLocation() async {
@@ -103,39 +119,46 @@ class _AddGlitchScreenState extends State<AddGlitchScreen> {
 
       setState(() => _isSaving = true);
 
-      String onlineImageUrl = '';
-      try {
-        // Upload to ImgBB
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Uploading image to Cloud...')),
-        );
-        onlineImageUrl = await ImgbbService.uploadImage(_imagePath!);
-      } catch (e) {
-        if (mounted) {
+      String onlineImageUrl = _imagePath!;
+      
+      // If imagePath doesn't start with 'http', it means a new local photo was taken, so we must upload it.
+      if (!onlineImageUrl.startsWith('http')) {
+        try {
+          // Upload to ImgBB
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to upload image: $e')),
+            const SnackBar(content: Text('Uploading image to Cloud...')),
           );
-          setState(() => _isSaving = false);
+          onlineImageUrl = await ImgbbService.uploadImage(_imagePath!);
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to upload image: $e')),
+            );
+            setState(() => _isSaving = false);
+          }
+          return; // Abort saving if upload fails
         }
-        return; // Abort saving if upload fails
       }
 
-      final newGlitch = Glitch(
+      final glitchToSave = Glitch(
+        id: widget.glitch?.id, // Keep the old ID if editing
         title: _titleController.text,
         description: _descController.text,
         imagePath: onlineImageUrl, // Save online URL instead of local path
-        dateCaught: DateTime.now().toIso8601String().split('T')[0],
+        dateCaught: widget.glitch?.dateCaught ?? DateTime.now().toIso8601String().split('T')[0], // Keep old date if editing
       );
 
-      // 1. Save to SQLite
-      final id = await DatabaseHelper.instance.insert(newGlitch);
-
-      // 2. Trigger Local Notification
-      await NotificationService().showNotification(
-        id: id,
-        title: 'New Glitch Caught!',
-        body: '${newGlitch.title} was successfully saved to your Dex.',
-      );
+      if (widget.glitch == null) {
+        final id = await DatabaseHelper.instance.insert(glitchToSave);
+        // Trigger Local Notification
+        await NotificationService().showNotification(
+          id: id,
+          title: 'New Glitch Caught!',
+          body: '${glitchToSave.title} was successfully saved to your Dex.',
+        );
+      } else {
+        await DatabaseHelper.instance.update(glitchToSave);
+      }
 
       if (mounted) {
         setState(() => _isSaving = false);
@@ -253,10 +276,4 @@ class _AddGlitchScreenState extends State<AddGlitchScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descController.dispose();
-    super.dispose();
-  }
 }

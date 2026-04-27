@@ -140,6 +140,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     return GlitchCard(
                       glitch: glitch,
                       onDelete: () => _deleteGlitch(glitch.id!),
+                      onEdit: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddGlitchScreen(glitch: glitch),
+                          ),
+                        );
+                        if (result == true) {
+                          _refreshGlitches();
+                        }
+                      },
                     );
                   },
                 ),

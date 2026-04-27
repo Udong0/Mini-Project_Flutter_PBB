@@ -6,11 +6,13 @@ import '../screens/full_screen_image_screen.dart';
 class GlitchCard extends StatelessWidget {
   final Glitch glitch;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   const GlitchCard({
     Key? key,
     required this.glitch,
     required this.onDelete,
+    required this.onEdit,
   }) : super(key: key);
 
   @override
@@ -132,10 +134,20 @@ class GlitchCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                  onPressed: onDelete,
-                  tooltip: 'Delete Glitch',
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit_outlined, color: Colors.blueAccent),
+                      onPressed: onEdit,
+                      tooltip: 'Edit Glitch',
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                      onPressed: onDelete,
+                      tooltip: 'Delete Glitch',
+                    ),
+                  ],
                 ),
               ],
             ),
