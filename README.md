@@ -2,7 +2,6 @@
 
 > A Flutter mobile application to capture, catalog, and backup real-world anomalies or "glitches" (like broken ATM screens, funny typos, or UI errors).
 
- **Watch the Demo Video:** [https://youtu.be/MC45hQ6WzHw](https://youtu.be/MC45hQ6WzHw)
 
 ---
 
