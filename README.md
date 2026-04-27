@@ -2,11 +2,11 @@
 
 > A Flutter mobile application to capture, catalog, and backup real-world anomalies or "glitches" (like broken ATM screens, funny typos, or UI errors).
 
-🎥 **Watch the Demo Video:** [https://youtu.be/MC45hQ6WzHw](https://youtu.be/MC45hQ6WzHw)
+ **Watch the Demo Video:** [https://youtu.be/MC45hQ6WzHw](https://youtu.be/MC45hQ6WzHw)
 
 ---
 
-## 🎯 Mini-Project Requirements Fulfillment
+##  Mini-Project Requirements Fulfillment
 
 This project was developed to fulfill the 40% Mini-Project grading rubric. Below is the mapping of the required features to the actual implementation in the app:
 
@@ -32,19 +32,19 @@ This project was developed to fulfill the 40% Mini-Project grading rubric. Below
 
 ---
 
-## ✨ Additional Features (Beyond Requirements)
+##  Additional Features (Beyond Requirements)
 
-- **📍 Auto GPS & Reverse Geocoding** — Automatically fetches coordinates and converts them to a human-readable street address using `geolocator` & `geocoding`.
-- **✏️ Image Annotation Canvas** — Draw directly on captured photos (circles, arrows, freehand) using `image_painter` to mark the exact anomaly.
-- **☁️ Free Cloud Image Hosting** — Photos are uploaded to ImgBB via `http` (Base64 POST), returning a permanent public URL stored in SQLite — no Firebase Storage costs!
-- **🛡️ ISP Proxy Bypass** — Uses `wsrv.nl` as a CDN proxy to serve ImgBB images, bypassing regional ISP blocks (e.g., Indihome/Telkomsel).
-- **🔐 Secure API Key Management** — ImgBB API key stored in `.env` via `flutter_dotenv`, excluded from version control via `.gitignore`.
-- **🔍 Full-Screen Pinch-to-Zoom Viewer** — Tap any glitch card image to open a fullscreen interactive viewer with `InteractiveViewer`.
-- **🔒 Firestore Security Rules** — Data is isolated per user: `allow read, write: if request.auth.uid == userId`. No cross-user data access.
+- ** Auto GPS & Reverse Geocoding** — Automatically fetches coordinates and converts them to a human-readable street address using `geolocator` & `geocoding`.
+- ** Image Annotation Canvas** — Draw directly on captured photos (circles, arrows, freehand) using `image_painter` to mark the exact anomaly.
+- ** Free Cloud Image Hosting** — Photos are uploaded to ImgBB via `http` (Base64 POST), returning a permanent public URL stored in SQLite — no Firebase Storage costs!
+- ** ISP Proxy Bypass** — Uses `wsrv.nl` as a CDN proxy to serve ImgBB images, bypassing regional ISP blocks (e.g., Indihome/Telkomsel).
+- ** Secure API Key Management** — ImgBB API key stored in `.env` via `flutter_dotenv`, excluded from version control via `.gitignore`.
+- ** Full-Screen Pinch-to-Zoom Viewer** — Tap any glitch card image to open a fullscreen interactive viewer with `InteractiveViewer`.
+- ** Firestore Security Rules** — Data is isolated per user: `allow read, write: if request.auth.uid == userId`. No cross-user data access.
 
 ---
 
-## 🔄 Application Flow
+##  Application Flow
 
 1. **Authentication (Login)**
    - User logs in via Firebase Authentication (Email/Password).
@@ -61,7 +61,7 @@ This project was developed to fulfill the 40% Mini-Project grading rubric. Below
 
 ---
 
-## 🛠️ Tech Stack & Dependencies
+##  Tech Stack & Dependencies
 
 | Category | Package |
 |---|---|
@@ -76,7 +76,7 @@ This project was developed to fulfill the 40% Mini-Project grading rubric. Below
 
 ---
 
-## 🚀 How to Run the Project Locally
+##  How to Run the Project Locally
 
 1. **Clone the repository:**
    ```bash
@@ -106,7 +106,7 @@ This project was developed to fulfill the 40% Mini-Project grading rubric. Below
 
 ---
 
-## 🔐 Security Notes
+##  Security Notes
 
 - The `.env` file containing the ImgBB API Key is **excluded from this repository** via `.gitignore`.
 - Firebase Security Rules are configured so each user can **only access their own data**.
